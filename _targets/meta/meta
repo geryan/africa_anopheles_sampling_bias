@@ -1,0 +1,3 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+locations_file|stem|e72cc4a3d7f8d21d|5d49a9bf9e4cbd7c|ef46db3751d8e999|-1312723698|data/tabular/research_locations_20240415.csv|t19828.0427981495s|398170c7c3654847|2714|file|local|vector|||2.409|package terra was built under R version 4.3.3|
+locations|stem|820672c840a9a094|0c859faec5fc4563|51b6c5b1de947f58|-1299370672||t19836.1642595865s|6c241e02dfb870a0|1958|rds|local|vector|||0.511||
