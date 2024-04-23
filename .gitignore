@@ -49,5 +49,6 @@ po/*~
 rsconnect/
 
 /data/tabular
+/data/spatial
 
 *.DS_Store
