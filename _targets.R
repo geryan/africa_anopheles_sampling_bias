@@ -1,11 +1,13 @@
 # library(devtools)
 # library(usethis)
 
+library(targets)
+library(geotargets)
+
+
 # tar_load_globals()
 # tar_load_everything()
 # tar_visnetwork()
-
-library(targets)
 
 tar_option_set(
   packages = c(
@@ -14,7 +16,8 @@ tar_option_set(
     "sdmtools",
     "terra",
     "gdistance",
-    "raster"
+    "raster",
+    "geotargets"
   )
 )
 
@@ -32,6 +35,13 @@ list(
   ),
   tar_target(
     locations,
-    read_csv(file = locations_file)
+    readr::read_csv(file = locations_file)
+  ),
+  tar_terra_vect(
+    africa_mask_v,
+    sdmtools::make_africa_mask(
+      file_name = "data/spatial/africa_mask.gpkg",
+      type = "vector"
+    )
   )
 )
