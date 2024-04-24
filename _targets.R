@@ -56,6 +56,15 @@ list(
     point_tbl_to_vect(
       africa_points
     )
+  ),
+  tar_target(
+    friction_file,
+    "data/spatial/2020_motorized_friction_surface.geotiff",
+    format = "file"
+  ),
+  tar_terra_rast(
+    friction_surface,
+    rast(friction_file)
   )
 
 )
