@@ -37,11 +37,19 @@ list(
     locations,
     readr::read_csv(file = locations_file)
   ),
+  # tar_terra_vect(
+  #   africa_mask_v,
+  #   sdmtools::make_africa_mask(
+  #     file_name = "data/spatial/africa_mask.gpkg",
+  #     type = "vector"
+  #   )
+  # ),
   tar_terra_vect(
     africa_mask_v,
     sdmtools::make_africa_mask(
-      file_name = "data/spatial/africa_mask.gpkg",
-      type = "vector"
+      file_name = "data/spatial/nga_mask.gpkg",
+      type = "vector",
+      countries = "NGA"
     )
   ),
   tar_target(
@@ -64,7 +72,8 @@ list(
   ),
   tar_terra_rast(
     friction_surface,
-    rast(friction_file)
+    terra::rast(friction_file) |>
+      terra::crop(africa_mask_v)
   )
 
 )
