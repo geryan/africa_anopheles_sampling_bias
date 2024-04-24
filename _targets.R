@@ -43,5 +43,19 @@ list(
       file_name = "data/spatial/africa_mask.gpkg",
       type = "vector"
     )
+  ),
+  tar_target(
+    africa_points,
+    select_points(
+      points = locations,
+      poly = africa_mask_v
+    )
+  ),
+  tar_terra_vect(
+    africa_points_v,
+    point_tbl_to_vect(
+      africa_points
+    )
   )
+
 )
