@@ -73,7 +73,17 @@ list(
   tar_terra_rast(
     friction_surface,
     terra::rast(friction_file) |>
-      terra::crop(africa_mask_v)
+      terra::crop(
+        y = africa_mask_v,
+        mask = TRUE
+      )
+  ),
+  tar_terra_rast(
+    travel_time,
+    get_travel_time(
+      friction_surface = friction_surface,
+      points = africa_points,
+      travel_time_filename = "outputs/travel_time.tif"
+    )
   )
-
 )
