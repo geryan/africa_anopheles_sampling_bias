@@ -14,7 +14,7 @@ get_travel_time <- function(
 
   fri <- sdmtools::split_rast(friction_surface, grain = split_grain)
 
-  fri |>
+  tgc <- fri |>
     lapply(
       FUN = raster::raster
     ) |>
@@ -37,10 +37,24 @@ get_travel_time <- function(
   #   tsn <- readRDS(t_filename)
   # }
 
-  friction
+  z <- merge(rast(raster(tgc[[1]])), rast(raster(tgc[[2]])), rast(raster(tgc[[3]])), rast(raster(tgc[[4]])))
+  x <- raster(z)
 
-  tgc <- geoCorrection(tsn)
-  saveRDS(tgc, tgc_filename)
+  nr <- as.integer(nrow(x))
+  nc <- as.integer(ncol(x))
+
+  tr <- new("TransitionLayer",
+            transitionMatrix = as.matrix(x) |> Matrix(data = _, sparse = TRUE),
+            nrows = nr,
+            ncols = nc,
+            extent = extent(x),
+            crs = projection(x, asText = FALSE),
+            matrixValues = "conductance")
+
+
+
+  # tgc <- geoCorrection(tsn)
+  # saveRDS(tgc, tgc_filename)
 
   xy.data.frame <- data.frame()
   xy.data.frame[1:npoints,1] <- points[,1]

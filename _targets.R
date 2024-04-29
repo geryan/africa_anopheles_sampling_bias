@@ -22,7 +22,8 @@ tar_option_set(
     "terra",
     "gdistance",
     "raster",
-    "geotargets"
+    "geotargets",
+    "tidyr"
   )#,
   #controller = crew_controller_local(workers = 4)
 )
