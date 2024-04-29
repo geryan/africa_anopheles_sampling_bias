@@ -12,7 +12,20 @@ get_travel_time <- function(
   npoints <- nrow(points)
 
 
-  fri <- split_rast(friction_surface, grain = split_grain)
+  fri <- sdmtools::split_rast(friction_surface, grain = split_grain)
+
+  fri |>
+    lapply(
+      FUN = raster::raster
+    ) |>
+    lapply(
+      FUN = function(z){
+        gdistance::transition(z, function(x) 1/mean(x), 8)
+      }
+    ) |>
+    lapply(
+      FUN = geoCorrection
+    )
 
 
   friction <- raster::raster(friction_surface)
