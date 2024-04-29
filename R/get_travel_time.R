@@ -5,21 +5,26 @@ get_travel_time <- function(
   tgc_filename = "outputs/areaTGC.rds",
   travel_time_filename = "outputs/travel_time.tif",
   overwrite_raster = TRUE,
-  overwrite_t = TRUE
+  #overwrite_t = TRUE,
+  split_grain = 1 # split friction_surface into split_grain^2 approximately equal geographic sized rasters
 ){
 
   npoints <- nrow(points)
 
+
+  fri <- split_rast(friction_surface, grain = split_grain)
+
+
   friction <- raster::raster(friction_surface)
 
+  # if(!file.exists(t_filename) | (file.exists(t_filename) & overwrite_t)){
+  #   tsn <- transition(friction, function(x) 1/mean(x), 8) # RAM intensive, can be very slow for large areas
+  #   saveRDS(tsn, t_filename)
+  # } else {
+  #   tsn <- readRDS(t_filename)
+  # }
 
-
-  if(!file.exists(t_filename) | (file.exists(t_filename) & overwrite_t)){
-    tsn <- transition(friction, function(x) 1/mean(x), 8) # RAM intensive, can be very slow for large areas
-    saveRDS(tsn, t_filename)
-  } else {
-    tsn <- readRDS(t_filename)
-  }
+  friction
 
   tgc <- geoCorrection(tsn)
   saveRDS(tgc, tgc_filename)
@@ -31,7 +36,7 @@ get_travel_time <- function(
 
   temp.raster <- accCost(tgc, xy.matrix)
 
-  writeRaster(temp.raster, travel_time_filename, overwrite = overwrite)
+  writeRaster(temp.raster, travel_time_filename, overwrite = overwrite_raster)
 
   rast(travel_time_filename)
 

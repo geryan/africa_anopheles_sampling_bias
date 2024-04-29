@@ -43,21 +43,21 @@ list(
     locations,
     readr::read_csv(file = locations_file)
   ),
-  tar_terra_vect(
-    africa_mask_v,
-    sdmtools::make_africa_mask(
-      file_name = "data/spatial/africa_mask.gpkg",
-      type = "vector"
-    )
-  ),
   # tar_terra_vect(
   #   africa_mask_v,
   #   sdmtools::make_africa_mask(
-  #     file_name = "data/spatial/nga_mask.gpkg",
-  #     type = "vector",
-  #     countries = "NGA"
+  #     file_name = "data/spatial/africa_mask.gpkg",
+  #     type = "vector"
   #   )
   # ),
+  tar_terra_vect(
+    africa_mask_v,
+    sdmtools::make_africa_mask(
+      file_name = "data/spatial/nga_mask.gpkg",
+      type = "vector",
+      countries = "NGA"
+    )
+  ),
   tar_target(
     africa_points,
     select_points(
@@ -91,7 +91,7 @@ list(
       points = africa_points,
       travel_time_filename = "outputs/travel_time.tif",
       overwrite_raster = TRUE,
-      overwrite_t = FALSE
+      overwrite_t = TRUE
     )
   )
 )
