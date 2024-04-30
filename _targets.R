@@ -22,8 +22,7 @@ tar_option_set(
     "terra",
     "gdistance",
     "raster",
-    "geotargets",
-    "tidyr"
+    "geotargets"
   )#,
   #controller = crew_controller_local(workers = 4)
 )
@@ -44,21 +43,21 @@ list(
     locations,
     readr::read_csv(file = locations_file)
   ),
-  # tar_terra_vect(
-  #   africa_mask_v,
-  #   sdmtools::make_africa_mask(
-  #     file_name = "data/spatial/africa_mask.gpkg",
-  #     type = "vector"
-  #   )
-  # ),
   tar_terra_vect(
     africa_mask_v,
     sdmtools::make_africa_mask(
-      file_name = "data/spatial/nga_mask.gpkg",
-      type = "vector",
-      countries = "NGA"
+      file_name = "data/spatial/africa_mask.gpkg",
+      type = "vector"
     )
   ),
+  # tar_terra_vect(
+  #   africa_mask_v,
+  #   sdmtools::make_africa_mask(
+  #     file_name = "data/spatial/nga_mask.gpkg",
+  #     type = "vector",
+  #     countries = "NGA"
+  #   )
+  # ),
   tar_target(
     africa_points,
     select_points(
@@ -90,9 +89,10 @@ list(
     get_travel_time(
       friction_surface = friction_surface,
       points = africa_points,
-      travel_time_filename = "outputs/travel_time.tif",
+      travel_time_filename = "outputs/travel_time_lge.tif",
       overwrite_raster = TRUE,
       overwrite_t = TRUE
+      #overwrite_t = FALSE
     )
   )
 )
