@@ -4,9 +4,21 @@ get_travel_time <- function(
   t_filename = "outputs/areaT.rds",
   tgc_filename = "outputs/areaTGC.rds",
   travel_time_filename = "outputs/travel_time.tif",
-  overwrite_raster = TRUE,
-  overwrite_t = TRUE
+  overwrite_raster = FALSE,
+  overwrite_t = FALSE
 ){
+
+  if(file.exists(travel_time_filename) & !overwrite_raster){
+
+    warning(sprintf(
+      "%s exists\nUsing existing file\nto re-generate, change overwirite_raster to TRUE %s",
+      travel_time_filename,
+      travel_time_filename
+    ))
+
+      return(terra::rast(travel_time_filename))
+
+  }
 
   npoints <- nrow(points)
 
