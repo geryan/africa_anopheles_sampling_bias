@@ -19,14 +19,14 @@
 #SBATCH --cpus-per-task=1
 
 # The amount of memory in megabytes per node:
-#SBATCH --mem=262144
+#SBATCH --mem=100000
 ## #SBATCH --mem=16384
 
 # Use this email address:
 #SBATCH --mail-user=ryange@unimelb.edu.au
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-1:0:00
+#SBATCH --time=0-2:00:00
 
 # check that the script is launched with sbatch
 if [ "x$SLURM_JOB_ID" == "x" ]; then
@@ -39,7 +39,6 @@ cd $HOME
 
 # The modules to load:
 module load R/4.3.2
-module load rgdal/1.6.6
 module load CMake/3.24.3
 
 # The job command(s):
