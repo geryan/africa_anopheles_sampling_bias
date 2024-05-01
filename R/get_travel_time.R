@@ -10,7 +10,6 @@ get_travel_time <- function(
 
   npoints <- nrow(points)
 
-
   friction <- raster::raster(friction_surface)
 
   if(!file.exists(t_filename) | (file.exists(t_filename) & overwrite_t)){
@@ -19,6 +18,7 @@ get_travel_time <- function(
   } else {
     tsn <- readRDS(t_filename)
   }
+
   tgc <- geoCorrection(tsn)
   saveRDS(tgc, tgc_filename)
 
