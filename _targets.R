@@ -35,13 +35,32 @@ tar_source()
 # Replace the target list below with your own:
 list(
   tar_target(
-    locations_file,
+    locations_new_file,
     "data/tabular/research_locations_20240415.csv",
     format = "file"
   ),
   tar_target(
+    locations_new,
+    readr::read_csv(file = locations_new_file)
+  ),
+  tar_target(
+    locations_ktu_file,
+    "data/tabular/lake_region_source_counts.csv",
+    format = "file"
+  ),
+  tar_target(
+    locations_ktu,
+    readr::read_csv(file = locations_ktu_file) |>
+      dplyr::select(longitude, latitude) |>
+      dplyr::rename(x = longitude, y = latitude)
+  ),
+  tar_target(
     locations,
-    readr::read_csv(file = locations_file)
+    dplyr::bind_rows(
+      locations_new,
+      locations_ktu
+    ) |>
+      dplyr::distinct()
   ),
   tar_terra_vect(
     africa_mask_v,
@@ -89,7 +108,7 @@ list(
     get_travel_time(
       friction_surface = friction_surface,
       points = africa_points,
-      travel_time_filename = "outputs/travel_time_lge.tif",
+      travel_time_filename = "outputs/travel_time.tif",
       overwrite_raster = FALSE,
       overwrite_t = FALSE
     )

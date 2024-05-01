@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|745e3ed4aafe99de|||||||||||||||
+.Random.seed|object|8dc42fd1e32118d2|||||||||||||||
 africa_mask_v|stem|f7301b81b368f834|208c4087b7a0e95c|2c530c1562a7fbd1|2133536751||t19844.0341922423s|650732fa8e3f26c5|6660750|format_custom&read=ZnVuY3Rpb24gKHBhdGgpIAp0ZXJyYTo6dmVjdChwYXRoKQ&write=ZnVuY3Rpb24gKG9iamVjdCwgcGF0aCkgCnsKICAgIHRlcnJhOjp3cml0ZVZlY3RvcihvYmplY3QsIHBhdGgsIGZpbGV0eXBlID0gIkdlb0pTT04iLCBvdmVyd3JpdGUgPSBUUlVFLCAKICAgICAgICBvcHRpb25zID0gIkVOQ09ESU5HPVVURi04IikKfQ&marshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp3cmFwKG9iamVjdCk&unmarshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp1bndyYXAob2JqZWN0KQ&convert=&copy=&repository=|local|vector|||1.398|dataspatialafrica_mask.gpkg existsUsing existing fileto regenerate, delete existing dataspatialafrica_mask.gpkg|
 africa_points|stem|5e038a35573f6794|822d4c9fb28215ff|6f5ff76825f1eac9|-155176821||t19844.0012496037s|31c315e01c2be16c|1016|rds|local|vector|||1.852||
 africa_points_v|stem|e82a2eaad3e716d2|a6810355ce1ad6e3|d30e09237fe36981|816037765||t19844.034336847s|2d746e87ce62856f|6381|format_custom&read=ZnVuY3Rpb24gKHBhdGgpIAp0ZXJyYTo6dmVjdChwYXRoKQ&write=ZnVuY3Rpb24gKG9iamVjdCwgcGF0aCkgCnsKICAgIHRlcnJhOjp3cml0ZVZlY3RvcihvYmplY3QsIHBhdGgsIGZpbGV0eXBlID0gIkdlb0pTT04iLCBvdmVyd3JpdGUgPSBUUlVFLCAKICAgICAgICBvcHRpb25zID0gIkVOQ09ESU5HPVVURi04IikKfQ&marshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp3cmFwKG9iamVjdCk&unmarshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp1bndyYXAob2JqZWN0KQ&convert=&copy=&repository=|local|vector|||0.001||
@@ -8,6 +8,10 @@ friction_surface|stem|9365e63f3c8fe876|418206b2eaea626e|eec973a04ee1e146|6849893
 get_travel_time|function|8cda8cb7e04bdc6b|||||||||||||||
 locations|stem|76b8b0476ecc6669|20f4e59a78bd538b|c43ced45e9606d71|-1299370672||t19844.0012472589s|7f6cea21d219b9af|1957|rds|local|vector|||0.268||
 locations_file|stem|ce03e598200de7db|3a56c64817b26cd7|2c530c1562a7fbd1|-1312723698|data/tabular/research_locations_20240415.csv|t19844.0031849256s|7b74ca45dcca103c|2714|file|local|vector|||0.001||
+locations_ktu|stem|0ab4a9fd9e3d32d8|be08dc6fb5e2228a|7058b4c3347a5b05|-573655558||t19844.1796277758s|a0078813820e1f42|733|rds|local|vector|||0.231||
+locations_ktu_file|stem|e8e8b0ef8834c638|8c40a1fc5d321f64|2c530c1562a7fbd1|947212887|data/tabular/lake_region_source_counts.csv|t19557.3129861111s|885c049459ae1aa9|1617|file|local|vector|||1.077||
+locations_new|stem|6d0d1ea0dc4f5289|b4686c638199faf2|74a1a024d15f3e8c|611637773||t19844.1799186864s|3ff49ff1dd90f7a9|1959|rds|local|vector|||0.222||
+locations_new_file|stem|ce03e598200de7db|3a56c64817b26cd7|2c530c1562a7fbd1|-1406842189|data/tabular/research_locations_20240415.csv|t19844.0031849256s|7b74ca45dcca103c|2714|file|local|vector|||1.075||
 point_tbl_to_vect|function|babc04a863f7e222|||||||||||||||
 select_points|function|9ee0c6c5a3de5a77|||||||||||||||
 trave_time|stem|f9fa8ddd4e38a56c|7d0fe7f6fcfabb8c|68625dfa5e955d15|-1459530910||t19839.0595907509s|daf6934fec4058c1|5013372|format_custom&read=ZnVuY3Rpb24gKHBhdGgpIAp0ZXJyYTo6cmFzdChwYXRoKQ&write=ZnVuY3Rpb24gKG9iamVjdCwgcGF0aCkgCnsKICAgIHRlcnJhOjp3cml0ZVJhc3RlcihvYmplY3QsIHBhdGgsIGZpbGV0eXBlID0gIkdUaWZmIiwgb3ZlcndyaXRlID0gVFJVRSwgCiAgICAgICAgZ2RhbCA9IGNoYXJhY3RlcigwKSkKfQ&marshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp3cmFwKG9iamVjdCk&unmarshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp1bndyYXAob2JqZWN0KQ&convert=&copy=&repository=|local|vector|||28.21||
