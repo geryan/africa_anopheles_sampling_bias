@@ -109,8 +109,8 @@ list(
       friction_surface = friction_surface,
       points = africa_points,
       travel_time_filename = "outputs/travel_time.tif",
-      overwrite_raster = TRUE,
-      overwrite_t = TRUE
+      overwrite_raster = FALSE,
+      overwrite_t = FALSE
     )
   )
 )
