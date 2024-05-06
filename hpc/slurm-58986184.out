@@ -1,0 +1,47 @@
+✔ skipped target locations_new_file
+▶ dispatched target africa_mask_v
+● completed target africa_mask_v [2.676 seconds]
+✔ skipped target friction_file
+✔ skipped target locations_ktu_file
+✔ skipped target locations_new
+▶ dispatched target friction_surface
+● completed target friction_surface [9.48 seconds]
+✔ skipped target locations_ktu
+✔ skipped target locations
+▶ dispatched target africa_points
+● completed target africa_points [3.17 seconds]
+▶ dispatched target africa_points_v
+● completed target africa_points_v [0.029 seconds]
+▶ dispatched target travel_time
+● completed target travel_time [29.444 minutes]
+▶ ended pipeline [29.933 minutes]
+Warning messages:
+1: data/spatial/africa_mask.gpkg exists
+Using existing file
+to re-generate, delete existing data/spatial/africa_mask.gpkg 
+2: In x@cpp$writeRaster(opt) :
+  GDAL Message 6: driver GTiff does not support creation option ENCODING
+3: 1 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages. 
+Job ID           : 58986184
+Cluster          : spartan
+User/Project     : ryange/punim0995
+Nodes            : 1
+Wall-clock time  : 00:30:05 / 02:00:00
+
+Displaying overall resources usage from 2024-05-01 16:50:54 to 2024-05-01 17:20:59:
+
+NODE            CPU#        TOT%   ( USR   / SYS   / WIO   / IDLE  ) 
+
+spartan-bm091 : 
+                CPU# 1    : 99.3   (  93.6 /   5.8 /   0.2 /   0.5 ) 
+
+
+Allocated CPUs            : 1    
+  CPUs with usage <25%    : 0    
+  CPUs with usage <50%    : 0    
+  CPUs with usage >50%    : 1    
+
+Memory used (RAM)         : 70.0%  [73437MB of 104858MB]
+
+--------------------------------------------
+
