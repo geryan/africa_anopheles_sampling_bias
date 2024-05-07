@@ -11,7 +11,7 @@ get_travel_time <- function(
   if(file.exists(travel_time_filename) & !overwrite_raster){
 
     warning(sprintf(
-      "%s exists\nUsing existing file\nto re-generate, change overwirite_raster to TRUE %s",
+      "%s exists\nUsing existing file\nto re-generate, change overwrite_raster to TRUE %s",
       travel_time_filename,
       travel_time_filename
     ))
