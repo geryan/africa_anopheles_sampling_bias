@@ -22,7 +22,8 @@ tar_option_set(
     "terra",
     "gdistance",
     "raster",
-    "geotargets"
+    "geotargets",
+    "traveltime"
   )#,
   #controller = crew_controller_local(workers = 4)
 )
@@ -62,21 +63,21 @@ list(
     ) |>
       dplyr::distinct()
   ),
-  tar_terra_vect(
-    africa_mask_v,
-    sdmtools::make_africa_mask(
-      file_name = "data/spatial/africa_mask.gpkg",
-      type = "vector"
-    )
-  ),
   # tar_terra_vect(
   #   africa_mask_v,
   #   sdmtools::make_africa_mask(
-  #     file_name = "data/spatial/nga_mask.gpkg",
-  #     type = "vector",
-  #     countries = "NGA"
+  #     file_name = "data/spatial/africa_mask.gpkg",
+  #     type = "vector"
   #   )
   # ),
+  tar_terra_vect(
+    africa_mask_v,
+    sdmtools::make_africa_mask(
+      file_name = "data/spatial/nga_mask.gpkg",
+      type = "vector",
+      countries = "NGA"
+    )
+  ),
   tar_target(
     africa_points,
     select_points(
@@ -91,26 +92,36 @@ list(
     )
   ),
   tar_target(
-    friction_file,
-    "data/spatial/2020_motorized_friction_surface.geotiff",
-    format = "file"
+    surface_extent,
+    traveltime::ext_from_terra(africa_mask_v)
   ),
   tar_terra_rast(
     friction_surface,
-    terra::rast(friction_file) |>
-      terra::crop(
-        y = africa_mask_v,
-        mask = TRUE
-      )
+    traveltime::get_friction_surface(
+      surface = "motor2020",
+      file_name = "data/spatial/friction_surface.tif",
+      overwrite = TRUE,
+      extent = surface_extent
+    ) |>
+      terra::mask(africa_mask_v)
   ),
+  # tar_terra_rast(
+  #   travel_time,
+  #   get_travel_time(
+  #     friction_surface = friction_surface,
+  #     points = africa_points,
+  #     travel_time_filename = "outputs/travel_time.tif",
+  #     overwrite_raster = FALSE,
+  #     overwrite_t = FALSE
+  #   )
+  # )
   tar_terra_rast(
-    travel_time,
-    get_travel_time(
+    travel_time_africa,
+    traveltime::calculate_travel_time(
       friction_surface = friction_surface,
       points = africa_points,
-      travel_time_filename = "outputs/travel_time.tif",
-      overwrite_raster = FALSE,
-      overwrite_t = FALSE
+      file_name = "outputs/travel_time_africa.tif",
+      overwrite_raster = TRUE
     )
   )
 )
