@@ -105,16 +105,6 @@ list(
     ) |>
       terra::mask(africa_mask_v)
   ),
-  # tar_terra_rast(
-  #   travel_time,
-  #   get_travel_time(
-  #     friction_surface = friction_surface,
-  #     points = africa_points,
-  #     travel_time_filename = "outputs/travel_time.tif",
-  #     overwrite_raster = FALSE,
-  #     overwrite_t = FALSE
-  #   )
-  # )
   tar_terra_rast(
     travel_time_africa,
     traveltime::calculate_travel_time(
