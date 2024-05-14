@@ -113,5 +113,11 @@ list(
       file_name = "outputs/travel_time_africa.tif",
       overwrite_raster = TRUE
     )
+  ),
+  tar_target(
+    tt_countries,
+    global_regions |>
+      dplyr::filter(continent == "Africa") |>
+      pull(country)
   )
 )
