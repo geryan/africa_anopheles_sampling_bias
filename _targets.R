@@ -23,7 +23,9 @@ tar_option_set(
     "gdistance",
     "raster",
     "geotargets",
-    "traveltime"
+    "traveltime",
+    "purrr",
+    "sf"
   )#,
   #controller = crew_controller_local(workers = 4)
 )
@@ -118,6 +120,6 @@ list(
     tt_countries,
     global_regions |>
       dplyr::filter(continent == "Africa") |>
-      pull(country)
+      pull(iso3)
   )
 )
