@@ -25,7 +25,8 @@ tar_option_set(
     "geotargets",
     "traveltime",
     "purrr",
-    "sf"
+    "sf",
+    "malariaAtlas"
   )#,
   #controller = crew_controller_local(workers = 4)
 )
@@ -65,21 +66,21 @@ list(
     ) |>
       dplyr::distinct()
   ),
-  # tar_terra_vect(
-  #   africa_mask_v,
-  #   sdmtools::make_africa_mask(
-  #     file_name = "data/spatial/africa_mask.gpkg",
-  #     type = "vector"
-  #   )
-  # ),
   tar_terra_vect(
     africa_mask_v,
     sdmtools::make_africa_mask(
-      file_name = "data/spatial/nga_mask.gpkg",
-      type = "vector",
-      countries = "NGA"
+      filename = "data/spatial/africa_mask.gpkg",
+      type = "vector"
     )
   ),
+  # tar_terra_vect(
+  #   africa_mask_v,
+  #   sdmtools::make_africa_mask(
+  #     file_name = "data/spatial/nga_mask.gpkg",
+  #     type = "vector",
+  #     countries = "NGA"
+  #   )
+  # ),
   tar_target(
     africa_points,
     select_points(
@@ -97,29 +98,37 @@ list(
     surface_extent,
     traveltime::ext_from_terra(africa_mask_v)
   ),
-  tar_terra_rast(
-    friction_surface,
-    traveltime::get_friction_surface(
-      surface = "motor2020",
-      file_name = "data/spatial/friction_surface.tif",
-      overwrite = TRUE,
-      extent = surface_extent
-    ) |>
-      terra::mask(africa_mask_v)
-  ),
-  tar_terra_rast(
-    travel_time_africa,
-    traveltime::calculate_travel_time(
-      friction_surface = friction_surface,
-      points = africa_points,
-      file_name = "outputs/travel_time_africa.tif",
-      overwrite_raster = TRUE
-    )
-  ),
+  # tar_terra_rast(
+  #   friction_surface,
+  #   traveltime::get_friction_surface(
+  #     surface = "motor2020",
+  #     file_name = "data/spatial/friction_surface.tif",
+  #     overwrite = TRUE,
+  #     extent = surface_extent
+  #   ) |>
+  #     terra::mask(africa_mask_v)
+  # ),
+  # tar_terra_rast(
+  #   travel_time_africa,
+  #   traveltime::calculate_travel_time(
+  #     friction_surface = friction_surface,
+  #     points = africa_points,
+  #     file_name = "outputs/travel_time_africa.tif",
+  #     overwrite_raster = TRUE
+  #   )
+  # ),
   tar_target(
     tt_countries,
     global_regions |>
       dplyr::filter(continent == "Africa") |>
       pull(iso3)
-  )
+  ),
+  tar_terra_vect(
+    country_shps,
+    get_country_shps(countries = tt_countries[c(3, 23, 53)])
+  )#,
+  # tar_target(
+  #   country_points,
+  #   sele
+  # )
 )
