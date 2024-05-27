@@ -1,4 +1,4 @@
-get_country_shps <- function(countries){
+make_country_shps <- function(countries, filename = "outputs/country.shps.gpkg"){
 
   z <- tibble(countries) |>
     mutate(
@@ -17,9 +17,15 @@ get_country_shps <- function(countries){
     )
 
   x <- vect(z$shp)
+  #x <- svc(z$shp)
 
-  values(x) <- z[,1]
+  values(x) <- z |> pull(countries)
+  #names(x) <- z |> pull(countries)
 
-  x
+  writeVector(
+    x,
+    filename = filename,
+    overwrite = TRUE
+  )
 
 }
