@@ -150,12 +150,12 @@ list(
         FUN = nrow
       )
     )
-  )#,
-  # tar_terra_vect(
-  #   country_shps_v,
-  #   read_country_shps(
-  #     country_shps_filename,
-  #     points_per_country
-  #   )
-  # )
+  ),
+  tar_terra_vect(
+    country_shps_v,
+    read_country_shps(
+      country_shps_filename,
+      points_per_country
+    )
+  )
 )

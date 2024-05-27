@@ -4,5 +4,9 @@ read_country_shps <- function(
 ) {
 
 
+  v <- vect(country_shps_filename)
 
+  v[["npoints"]] <- points_per_country$npoints
+
+  v
 }
