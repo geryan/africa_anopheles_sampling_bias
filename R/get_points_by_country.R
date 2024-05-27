@@ -9,7 +9,7 @@ get_points_by_country <- function(
   )
 
   country_shps_v <- vect(country_shps_tbl$shp)
-  values(country_shps_v) <- country_shps_tbl |> pull(countries)
+  country_shps_v$country <- country_shps_tbl |> pull(countries)
 
   writeVector(
     country_shps_v,
