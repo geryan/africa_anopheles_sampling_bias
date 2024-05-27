@@ -124,15 +124,22 @@ list(
       dplyr::filter(continent == "Africa") |>
       pull(iso3)
   ),
-  tar_terra_vect(
-    country_shps,
-    get_country_shps(countries = tt_countries[c(3, 23, 53)])
+  tar_target(
+    country_shps_filename,
+    "data/spatial/country.shps.gpkg"
   ),
   tar_target(
-    country_points,
-    get_points_by_country(
-      africa_points,
-      country_shps
+    mk_country_shps,
+    make_country_shps(
+      countries = tt_countries[c(3, 23, 53)],
+      filename = country_shps_filename
     )
-  )
+  )#,
+  # tar_target(
+  #   country_points,
+  #   get_points_by_country(
+  #     africa_points,
+  #     country_shps
+  #   )
+  # )
 )
