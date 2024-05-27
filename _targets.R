@@ -28,7 +28,8 @@ tar_option_set(
     "sf",
     "malariaAtlas"
   )#,
-  #controller = crew_controller_local(workers = 4)
+  #controller = crew_controller_local(workers = 4),
+  #format = "qs"
 )
 
 
@@ -85,7 +86,7 @@ list(
     africa_points,
     select_points(
       points = locations,
-      poly = africa_mask_v
+      pol = africa_mask_v
     )
   ),
   tar_terra_vect(
@@ -126,9 +127,12 @@ list(
   tar_terra_vect(
     country_shps,
     get_country_shps(countries = tt_countries[c(3, 23, 53)])
-  )#,
-  # tar_target(
-  #   country_points,
-  #   sele
-  # )
+  ),
+  tar_target(
+    country_points,
+    get_points_by_country(
+      africa_points,
+      country_shps
+    )
+  )
 )
