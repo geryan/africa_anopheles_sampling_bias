@@ -1,6 +1,6 @@
-make_country_shps <- function(countries, filename = "outputs/country.shps.gpkg"){
+make_country_shps <- function(countries){
 
-  z <- tibble(countries) |>
+  tibble(countries) |>
     mutate(
       shp = map(
         .x = countries,
@@ -15,17 +15,5 @@ make_country_shps <- function(countries, filename = "outputs/country.shps.gpkg")
         }
       )
     )
-
-  x <- vect(z$shp)
-  #x <- svc(z$shp)
-
-  values(x) <- z |> pull(countries)
-  #names(x) <- z |> pull(countries)
-
-  writeVector(
-    x,
-    filename = filename,
-    overwrite = TRUE
-  )
 
 }

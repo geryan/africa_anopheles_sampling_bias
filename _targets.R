@@ -126,13 +126,14 @@ list(
   ),
   tar_target(
     country_shps_filename,
-    "data/spatial/country.shps.gpkg"
+    "data/spatial/country_shps.gpkg"
   ),
   tar_target(
-    mk_country_shps,
-    make_country_shps(
+    country_points,
+    get_points_by_country(
+      points = africa_points,
       countries = tt_countries[c(3, 23, 53)],
-      filename = country_shps_filename
+      shp_filename = country_shps_filename
     )
   )#,
   # tar_target(
