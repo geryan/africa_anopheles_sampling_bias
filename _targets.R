@@ -119,28 +119,43 @@ list(
   #   )
   # ),
   tar_target(
-    tt_countries,
+    tt_countries_all,
     global_regions |>
       dplyr::filter(continent == "Africa") |>
       pull(iso3)
+  ),
+  tar_target(
+    tt_countries,
+    tt_countries_all[c(3, 23, 53)]
+    #tt_countries_all
   ),
   tar_target(
     country_shps_filename,
     "data/spatial/country_shps.gpkg"
   ),
   tar_target(
-    country_points,
+    country_points_list,
     get_points_by_country(
       points = africa_points,
-      countries = tt_countries[c(3, 23, 53)],
+      countries = tt_countries,
       shp_filename = country_shps_filename
     )
+  ),
+  tar_target(
+    points_per_country,
+    tibble(
+      country = tt_countries,
+      npoints = sapply(
+        X = country_points_list,
+        FUN = nrow
+      )
+    )
   )#,
-  # tar_target(
-  #   country_points,
-  #   get_points_by_country(
-  #     africa_points,
-  #     country_shps
+  # tar_terra_vect(
+  #   country_shps_v,
+  #   read_country_shps(
+  #     country_shps_filename,
+  #     points_per_country
   #   )
   # )
 )
