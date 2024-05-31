@@ -3,7 +3,7 @@
 # .libPaths("~/R/library/")
 
 # install.packages("geotargets", repos = c("https://njtierney.r-universe.dev", "https://cran.r-project.org"))
-# remotes::install_github("idem-lab/sdmtools")
+# install.packages(c("traveltime", "sdmtools"), repos = c("https://idem-lab.r-universe.dev")
 
 library(targets)
 library(geotargets)
@@ -35,11 +35,8 @@ tar_option_set(
 )
 
 
-# Run the R scripts in the R/ folder with your custom functions:
 tar_source()
-# tar_source("other_functions.R") # Source other scripts as needed.
 
-# Replace the target list below with your own:
 list(
   tar_target(
     locations_new_file,
@@ -103,6 +100,9 @@ list(
       africa_points
     )
   ),
+
+  ## TT whole continent
+
   tar_target(
     surface_extent,
     traveltime::ext_from_terra(africa_mask_v)
@@ -126,6 +126,17 @@ list(
       overwrite = TRUE
     )
   ),
+  tar_target(
+    trave_time_africa_plot,
+    contour(
+      travel_time_africa,
+      filled = TRUE,
+      nlevels = 14,
+      col = iddu(16)
+    )
+  ),
+
+  ## TT by country
   tar_target(
     country_shps_filename,
     "data/spatial/country_shps.gpkg"
