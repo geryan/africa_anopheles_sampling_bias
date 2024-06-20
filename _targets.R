@@ -132,7 +132,7 @@ list(
       travel_time_africa,
       filled = TRUE,
       nlevels = 14,
-      col = iddu(16)
+      col = idem(16)
     )
   ),
 
