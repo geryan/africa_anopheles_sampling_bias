@@ -179,6 +179,17 @@ list(
       travel_time_africa,
       country_points_list
     )
+  ),
+  tar_terra_rast(
+    tt_country,
+    merge(
+      travel_time_country, travel_time_africa,
+      filename = "outputs/tt_by_country.tif",
+      overwrite = TRUE
+    )
   )
 )
+
+# plots of points overlaying travel time
+
 
