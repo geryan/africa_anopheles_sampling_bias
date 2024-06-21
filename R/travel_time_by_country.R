@@ -29,9 +29,24 @@ travel_time_by_country <- function(
                 filter(country == x)
             )
 
-            calculate_travel_time(
+            r <- calculate_travel_time(
               friction_surface = cfs,
               points = pl[[x]],
+            )
+
+            idx <- which(values(r) == Inf)
+
+            r[idx] <- NA
+
+            #crs(r) <- crs(tt)
+            #ext(r) <- ext(tt)
+
+            writereadrast(
+              r,
+              filename = sprintf(
+                "outputs/tt_by_country/%s_.tif",
+                x
+              )
             )
 
           }
@@ -42,44 +57,15 @@ travel_time_by_country <- function(
         shp = country_shps_v,
         pl = country_points_list
       )
+    ) |>
+    pull(r) |>
+    sprc() |>
+    merge() |>
+    writereadrast(
+      filename = "outputs/travel_time_by_country.tif",
+      overwrite = TRUE,
+      layernames = "travel_time"
     )
-
-
-
-  # countries <- tt_countries[c(3, 23, 53)]
-  #
-  # tibble::tibble(countries) |>
-  #   dplyr::mutate(
-  #     shp = purrr::map(
-  #       .x = countries,
-  #       .f = function(x){
-  #         malariaAtlas::getShp(
-  #           ISO = x
-  #          ) |>
-  #           sf::st_make_valid() |>
-  #           sf::st_union() |>
-  #           terra::vect() |>
-  #           terra::fillHoles()
-  #       }
-  #     ),
-  #     fs = purrr::map(
-  #       .x = shp,
-  #       .f = function(x){
-  #         traveltime::get_friction_surface(
-  #           surface = "motor2020",
-  #           file_name = temptif(),
-  #           overwrite = TRUE,
-  #           extent = x
-  #         ) |>
-  #           mask(mask = x)
-  #       }
-  #     ),
-  #     tt = purrr::map(
-  #       .x = fs
-  #     )
-  #   )
-
-
 
 }
 

@@ -3,7 +3,7 @@
 # .libPaths("~/R/library/")
 
 # install.packages("geotargets", repos = c("https://njtierney.r-universe.dev", "https://cran.r-project.org"))
-# install.packages(c("traveltime", "sdmtools"), repos = c("https://idem-lab.r-universe.dev")
+# install.packages(c("traveltime", "sdmtools"), repos = c("https://idem-lab.r-universe.dev"))
 
 library(targets)
 library(geotargets)
@@ -74,14 +74,14 @@ list(
   ),
   tar_target(
     tt_countries,
-    tt_countries_all[c(3, 23, 53)]
-    #tt_countries_all
+    #tt_countries_all[c(3, 23, 53)]
+    tt_countries_all
   ),
   tar_terra_vect(
     africa_mask_v,
     sdmtools::make_africa_mask(
-      #filename = "data/spatial/africa_mask.gpkg",
-      filename = "data/spatial/btg_mask.gpkg",
+      filename = "data/spatial/africa_mask.gpkg",
+      #filename = "data/spatial/btg_mask.gpkg",
       countries = tt_countries,
       type = "vector"
     )
@@ -169,5 +169,16 @@ list(
   tar_target(
     country_points_plot,
     make_country_points_plot(country_shps_v)
+  ),
+  tar_terra_rast(
+    travel_time_country,
+    travel_time_by_country(
+      friction_surface,
+      country_shps_v,
+      points_per_country,
+      travel_time_africa,
+      country_points_list
+    )
   )
 )
+

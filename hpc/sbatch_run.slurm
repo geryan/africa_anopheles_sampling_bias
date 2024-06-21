@@ -26,7 +26,7 @@
 #SBATCH --mail-user=ryange@unimelb.edu.au
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-2:00:00
+#SBATCH --time=0-3:00:00
 
 # check that the script is launched with sbatch
 if [ "x$SLURM_JOB_ID" == "x" ]; then
