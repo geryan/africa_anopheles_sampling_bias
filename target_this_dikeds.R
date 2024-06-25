@@ -8,7 +8,8 @@ library(tidyterra)
 
 p_tt <- ggplot() +
   geom_spatraster(data = travel_time_africa) +
-  theme_minimal() +
+  theme_void() +
+  theme(legend.position = "none") +
   scale_fill_viridis_c(
     option = "G",
     begin = 1,
@@ -30,8 +31,8 @@ ggsave(
 ## tt by country
 p_tt_country <- ggplot() +
   geom_spatraster(data = tt_country) +
-  #geom_spatvector(data = africa_points_v) +
-  theme_minimal() +
+  theme_void() +
+  theme(legend.position = "none") +
   scale_fill_viridis_c(
     option = "G",
     begin = 1,
@@ -52,12 +53,13 @@ ggsave(
 ## tt by country plus points
 
 p_tt_country_pts <- ggplot() +
-  geom_spatraster(data = tt_country) +
+  geom_spatraster(data = sqrt(tt_country)) +
   geom_spatvector(
     data = africa_points_v,
     col = "hotpink"
   ) +
-  theme_minimal() +
+  theme_void() +
+  theme(legend.position = "none") +
   scale_fill_viridis_c(
     option = "G",
     begin = 1,
@@ -69,8 +71,12 @@ p_tt_country_pts
 
 ggsave(
   "outputs/figures/tt_country_pts.png",
-  plot = p_tt_country,
+  plot = p_tt_country_pts,
   width = 2000,
   height = 1600,
   units = "px"
 )
+
+
+
+
