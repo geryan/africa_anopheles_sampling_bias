@@ -3,7 +3,7 @@
 # Tue Apr 30 2024 16:05:22 GMT+1000 (Australian Eastern Standard Time)
 
 # Partition for the job:
-#SBATCH --partition=cascade
+#SBATCH --partition=sapphire
 
 # Multithreaded (SMP) job: must run on one node
 #SBATCH --nodes=1
@@ -26,7 +26,7 @@
 #SBATCH --mail-user=ryange@unimelb.edu.au
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-3:00:00
+#SBATCH --time=0-4:00:00
 
 # check that the script is launched with sbatch
 if [ "x$SLURM_JOB_ID" == "x" ]; then
@@ -34,15 +34,13 @@ if [ "x$SLURM_JOB_ID" == "x" ]; then
    exit 1
 fi
 
-# Run the job from your home directory:
-cd $HOME
 
 # The modules to load:
 module load R/4.3.2
 module load CMake/3.24.3
 
 # The job command(s):
-cd /home/ryange/africa_anopheles_sampling_bias
+cd /data/gpfs/projects/unim1422/africa_anopheles_sampling_bias
 
 Rscript --vanilla run.R
 

@@ -28,7 +28,8 @@ tar_option_set(
     "sf",
     "malariaAtlas",
     "tidyterra",
-    "idpalette"
+    "idpalette",
+    "readxl"
   )#,
   #controller = crew_controller_local(workers = 4),
   #format = "qs"
@@ -38,14 +39,36 @@ tar_option_set(
 tar_source()
 
 list(
+  # tar_target(
+  #   locations_new_file,
+  #   "data/tabular/research_locations_20240415.csv",
+  #   format = "file"
+  # ),
+  # tar_target(
+  #   locations_new,
+  #   readr::read_csv(file = locations_new_file)
+  # ),
   tar_target(
     locations_new_file,
-    "data/tabular/research_locations_20240415.csv",
+    "data/tabular/unique_entries 26.sep.2024.xls",
     format = "file"
   ),
   tar_target(
     locations_new,
-    readr::read_csv(file = locations_new_file)
+    read_excel(
+      path = locations_new_file,
+      sheet = "unique_entries 12.sep.204"
+    ) |>
+      select(
+        x = Longitude,
+        y = Latitude
+      ) |>
+       mutate(
+         x = as.numeric(x),
+         y = as.numeric(y)
+       ) |>
+      filter(!is.na(x) & !is.na(y)) |>
+      distinct()
   ),
   tar_target(
     locations_ktu_file,

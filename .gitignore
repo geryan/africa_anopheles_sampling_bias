@@ -39,3 +39,4 @@ rsconnect/
 outputs
 *.pdf
 *.out
+*.html

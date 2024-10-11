@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|11ca7c1e548b152a|||||||||||||||
+.Random.seed|object|e9d5e4628fd92a42|||||||||||||||
 africa_mask_v|stem|f7301b81b368f834|30835c7fdc52551e|7eb7b411741bbcc3|2133536751||t19895.1374227021s|650732fa8e3f26c5|6660750|format_custom&read=ZnVuY3Rpb24gKHBhdGgpIAp0ZXJyYTo6dmVjdChwYXRoKQ&write=ZnVuY3Rpb24gKG9iamVjdCwgcGF0aCkgCnsKICAgIHRlcnJhOjp3cml0ZVZlY3RvcihvYmplY3QsIHBhdGgsIGZpbGV0eXBlID0gU3lzLmdldGVudigiR0VPVEFSR0VUU19HREFMX1ZFQ1RPUl9EUklWRVIiKSwgCiAgICAgICAgb3ZlcndyaXRlID0gVFJVRSwgb3B0aW9ucyA9IHN0cnNwbGl0KFN5cy5nZXRlbnYoIkdFT1RBUkdFVFNfR0RBTF9WRUNUT1JfQ1JFQVRJT05fT1BUSU9OUyIsIAogICAgICAgICAgICB1bnNldCA9ICI7IiksICI7IilbWzFdXSkKfQ&marshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp3cmFwKG9iamVjdCk&unmarshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp1bndyYXAob2JqZWN0KQ&convert=&copy=&repository=|local|vector|||0.139|dataspatialafrica_mask.gpkg existsUsing existing fileto regenerate, delete existing dataspatialafrica_mask.gpkg|
 africa_points|stem|d2795d3dbb313e39|1e6c8cae28afc30d|d5d94d883ff6cc00|-155176821||t19895.137424788s|7946b2e4e5c94b1e|1545|rds|local|vector|||1.456||
 africa_points_v|stem|3aec42189f311e62|a6810355ce1ad6e3|93e96f1a827cd222|816037765||t19895.1375288813s|f13b06cf159288fa|10507|format_custom&read=ZnVuY3Rpb24gKHBhdGgpIAp0ZXJyYTo6dmVjdChwYXRoKQ&write=ZnVuY3Rpb24gKG9iamVjdCwgcGF0aCkgCnsKICAgIHRlcnJhOjp3cml0ZVZlY3RvcihvYmplY3QsIHBhdGgsIGZpbGV0eXBlID0gU3lzLmdldGVudigiR0VPVEFSR0VUU19HREFMX1ZFQ1RPUl9EUklWRVIiKSwgCiAgICAgICAgb3ZlcndyaXRlID0gVFJVRSwgb3B0aW9ucyA9IHN0cnNwbGl0KFN5cy5nZXRlbnYoIkdFT1RBUkdFVFNfR0RBTF9WRUNUT1JfQ1JFQVRJT05fT1BUSU9OUyIsIAogICAgICAgICAgICB1bnNldCA9ICI7IiksICI7IilbWzFdXSkKfQ&marshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp3cmFwKG9iamVjdCk&unmarshal=ZnVuY3Rpb24gKG9iamVjdCkgCnRlcnJhOjp1bndyYXAob2JqZWN0KQ&convert=&copy=&repository=|local|vector|||0.011||
@@ -11,11 +11,11 @@ friction_surface|stem|4b45693e00c544a5|1eacfd9a0e161508|bfc2c2a208645023|6849893
 get_country_shps|function|6e23c1037c038358|||||||||||||||
 get_points_by_country|function|626ab8c9362e8560|||||||||||||||
 get_travel_time|function|a662d4a5c734f744|||||||||||||||
-locations|stem|3d0b9a01193eaf95|070a9b9170ee4c4d|a5ace4317167dbc6|-1299370672||t19895.1374167778s|cc86ca04246bca3a|2349|rds|local|vector|||0.003||
+locations|stem|350fce2347a70a7f|070a9b9170ee4c4d|840f2f50e0410fb8|-1299370672||t20007.1105447434s|14f41c4d8863790f|4559|rds|local|vector|||0||
 locations_ktu|stem|c3680ea690a9ed24|be08dc6fb5e2228a|7058b4c3347a5b05|-573655558||t19895.137413786s|a0078813820e1f42|733|rds|local|vector|||0.066||
 locations_ktu_file|stem|e8e8b0ef8834c638|8c40a1fc5d321f64|2c530c1562a7fbd1|947212887|data/tabular/lake_region_source_counts.csv|t19895.1376130417s|885c049459ae1aa9|1617|file|local|vector|||0.001||
-locations_new|stem|76b8b0476ecc6669|b4686c638199faf2|74a1a024d15f3e8c|611637773||t19895.1374152691s|7f6cea21d219b9af|1957|rds|local|vector|||1.107||
-locations_new_file|stem|ce03e598200de7db|3a56c64817b26cd7|2c530c1562a7fbd1|-1406842189|data/tabular/research_locations_20240415.csv|t19895.1376142997s|7b74ca45dcca103c|2714|file|local|vector|||2.552||
+locations_new|stem|00943789c1bab452|e438ec22339e4e77|9e6c61739cdafeaf|611637773||t20007.1105446978s|7d88c2722c90f866|4318|rds|local|vector|||0.049|There were 2 warnings in mutate.The first warning wasℹ In argument x  as.numericx.Caused by warning NAs introduced by coercionℹ Run dplyrlast_dplyr_warnings to see the 1 remaining warning.|
+locations_new_file|stem|a31d55f80ce5387c|1424a5d37a93d8b9|2c530c1562a7fbd1|-1406842189|data/tabular/unique_entries 26.sep.2024.xls|t20007.0877965435s|6cf028d691342b31|130560|file|local|vector|||1.47||
 make_country_points_plot|function|5fb9f7c014a50279|||||||||||||||
 make_country_shps|function|aac1a0c0788e3f1b|||||||||||||||
 point_tbl_to_vect|function|babc04a863f7e222|||||||||||||||
