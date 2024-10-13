@@ -48,6 +48,10 @@ list(
   #   locations_new,
   #   readr::read_csv(file = locations_new_file)
   # ),
+
+  # get location data
+
+  # larger set by Twatasha
   tar_target(
     locations_new_file,
     "data/tabular/unique_entries 26.sep.2024.xls",
@@ -70,6 +74,8 @@ list(
       filter(!is.na(x) & !is.na(y)) |>
       distinct()
   ),
+
+  # original smaller set by Gia
   tar_target(
     locations_ktu_file,
     "data/tabular/lake_region_source_counts.csv",
@@ -81,6 +87,9 @@ list(
       dplyr::select(longitude, latitude) |>
       dplyr::rename(x = longitude, y = latitude)
   ),
+
+  # join together
+  # nb this will include all locations outside as well as inside of Africa
   tar_target(
     locations,
     dplyr::bind_rows(
@@ -110,6 +119,7 @@ list(
     )
   ),
 
+  # select to locations just within Africa
   tar_target(
     africa_points,
     select_points(
@@ -125,7 +135,7 @@ list(
   ),
 
   ## TT whole continent
-
+  # this version calculates travel time from the nearest research location
   tar_target(
     surface_extent,
     traveltime::ext_from_terra(africa_mask_v)
@@ -160,6 +170,10 @@ list(
   ),
 
   ## TT by country
+  # this version calculates from first, the nearest research location
+  # within the country, and if none, then the absolute nearest research location
+  # the implication of this is that average distance should increase in this
+  # version as sites may be closer to a location over a border than within
   tar_target(
     country_shps_filename,
     "data/spatial/country_shps.gpkg"
