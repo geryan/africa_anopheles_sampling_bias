@@ -79,4 +79,54 @@ ggsave(
 
 
 
+## with all MAP points
+
+library("malariaAtlas")
+
+occurrences <- getVecOcc(continent = "Africa")
+
+occ_pts <- bind_cols(
+  occurrences |>
+    as.data.frame(),
+  occurrences |>
+    st_coordinates()
+) |>
+  as_tibble() |>
+  select(-geometry) |>
+  vect(
+    geom = c("X", "Y"),
+    crs = crs(africa_points_v)
+  )
+
+ggplot() +
+  geom_spatraster(data = sqrt(tt_country)) +
+  geom_spatvector(
+    data = occ_pts,
+    col = "yellow"
+  ) +
+  geom_spatvector(
+    data = africa_points_v,
+    col = "hotpink"
+  ) +
+  theme_void() +
+  theme(legend.position = "none") +
+  scale_fill_viridis_c(
+    option = "G",
+    begin = 1,
+    end = 0,
+    na.value = "white"
+  )
+
+p_tt_country_pts
+
+ggsave(
+  "outputs/figures/tt_country_pts.png",
+  plot = p_tt_country_pts,
+  width = 2000,
+  height = 1600,
+  units = "px"
+)
+
+
+
 
