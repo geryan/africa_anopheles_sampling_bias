@@ -83,6 +83,7 @@ ggsave(
 
 library("malariaAtlas")
 
+# get occurrence points
 occurrences <- getVecOcc(continent = "Africa")
 
 occ_pts <- bind_cols(
@@ -98,10 +99,12 @@ occ_pts <- bind_cols(
     crs = crs(africa_points_v)
   )
 
-
+# join occurrence and research location points
+# add data type col to research location points
 apts <- africa_points_v
 apts$data_type <- "Research\nfacility"
 
+# join them
 ppts <- c(
   occ_pts |>
     mutate(data_type = "Vector\noccurrence") |>
@@ -110,9 +113,12 @@ ppts <- c(
 ) |>
   vect()
 
+# get flat raster mask for Africa
 new_mask <- tt_country
 new_mask[which(!is.na(values(new_mask)))] <- 1
 
+
+# plot of vector occurrence locations
 p_vec_occ <- ggplot() +
   geom_spatraster(
     data = new_mask
@@ -153,6 +159,47 @@ ggsave(
 )
 
 
+p_vec_occ_res_loc <- ggplot() +
+  geom_spatraster(
+    data = new_mask
+  ) +
+  geom_spatvector(
+    data = ppts,
+    aes(
+      col = data_type
+    )
+  ) +
+  scale_fill_viridis_c(
+    option = "G",
+    begin = 1,
+    end = 0.7,
+    na.value = "white",
+    guide = "none"
+  ) +
+  scale_colour_manual(
+    values = c("deeppink", "gold"),
+    guide = guide_legend(title = "Data type")
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(0.25, 0.4)
+  )
+
+p_vec_occ_res_loc
+
+ggsave(
+  "outputs/figures/vec_occ_res.png",
+  plot = p_vec_occ_res_loc,
+  width = 1600,
+  height = 1600,
+  units = "px",
+  bg = "white"
+)
+
+
+
+
 ggplot() +
   geom_spatraster(data = sqrt(tt_country)) +
   geom_spatvector(
@@ -174,6 +221,63 @@ ggplot() +
 
 p_tt_country_pts
 
+## Epi plots for comparison
+
+# mask for kenya tanzania and uganda
+kut <- make_africa_mask(
+  type = "vector",
+  countries = c("KEN", "UGA", "TZA")
+)
+
+# get sp version for getRaster
+library(raster)
+kutsp <- as(kut, "Spatial")
 
 
 
+
+pfpc <- getRaster("Malaria__202406_Global_Pf_Incidence_Count")
+
+
+pfpc_kut <- pfpc |>
+  crop(kut) |>
+  mask(kut)
+
+plot(pfpc_kut |> sqrt())
+
+pfir <- getRaster("Malaria__202406_Global_Pf_Incidence_Rate")
+
+pfir_kut <- pfir |>
+  crop(kut) |>
+  mask(kut)
+plot(pfir_kut)
+
+
+pfmc <- getRaster(
+  "Malaria__202406_Global_Pf_Mortality_Count",
+  shp = kutsp
+)
+
+pfmc[is.na(values(pfmc))] <- 0
+pfmc <- mask(pfmc, kut)
+plot(pfmc^(1/3))
+
+ggplot() +
+  geom_spatraster(
+    data = pfmc^(1/3)
+  ) +
+  theme_void() +
+  theme(legend.position = "none") +
+  scale_fill_viridis_c(
+    option = "G",
+    begin = 1,
+    end = 0,
+    na.value = "white"
+  )
+ggsave(
+  filename = "outputs/figures/pf_mortality_count_scaled.png",
+  width = 1600,
+  height = 1600,
+  units = "px",
+  bg = "white"
+)
