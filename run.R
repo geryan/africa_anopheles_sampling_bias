@@ -1,4 +1,5 @@
-.libPaths("~/R/library/")
+#.libPaths("~/R/library/")
+.libPaths("/home/ryange/R/gr_lib")
 library(targets)
 library(geotargets)
 tar_make()
