@@ -39,65 +39,68 @@ tar_option_set(
 tar_source()
 
 list(
+  # get location data
+  #
   # tar_target(
   #   locations_new_file,
-  #   "data/tabular/research_locations_20240415.csv",
+  #   "data/tabular/unique_entries 26.sep.2024.xls",
   #   format = "file"
   # ),
   # tar_target(
   #   locations_new,
-  #   readr::read_csv(file = locations_new_file)
+  #   read_excel(
+  #     path = locations_new_file,
+  #     sheet = "unique_entries 12.sep.204"
+  #   ) |>
+  #     select(
+  #       x = Longitude,
+  #       y = Latitude
+  #     ) |>
+  #      mutate(
+  #        x = as.numeric(x),
+  #        y = as.numeric(y)
+  #      ) |>
+  #     filter(!is.na(x) & !is.na(y)) |>
+  #     distinct()
+  # ),
+  #
+  # # original smaller set by Gia
+  # tar_target(
+  #   locations_ktu_file,
+  #   "data/tabular/lake_region_source_counts.csv",
+  #   format = "file"
+  # ),
+  #
+  # tar_target(
+  #   locations_ktu,
+  #   readr::read_csv(file = locations_ktu_file) |>
+  #     dplyr::select(longitude, latitude) |>
+  #     dplyr::rename(x = longitude, y = latitude)
+  # ),
+  #
+  # # join together
+  # # nb this will include all locations outside as well as inside of Africa
+  # tar_target(
+  #   locations,
+  #   dplyr::bind_rows(
+  #     locations_new,
+  #     locations_ktu
+  #   ) |>
+  #     dplyr::distinct()
   # ),
 
-  # get location data
-
-  # larger set by Twatasha
   tar_target(
-    locations_new_file,
-    "data/tabular/unique_entries 26.sep.2024.xls",
+    locfile,
+    "data/tabular/tidy/affiliation_simple_coords.csv",
     format = "file"
   ),
-  tar_target(
-    locations_new,
-    read_excel(
-      path = locations_new_file,
-      sheet = "unique_entries 12.sep.204"
-    ) |>
-      select(
-        x = Longitude,
-        y = Latitude
-      ) |>
-       mutate(
-         x = as.numeric(x),
-         y = as.numeric(y)
-       ) |>
-      filter(!is.na(x) & !is.na(y)) |>
-      distinct()
-  ),
 
-  # original smaller set by Gia
-  tar_target(
-    locations_ktu_file,
-    "data/tabular/lake_region_source_counts.csv",
-    format = "file"
-  ),
-  tar_target(
-    locations_ktu,
-    readr::read_csv(file = locations_ktu_file) |>
-      dplyr::select(longitude, latitude) |>
-      dplyr::rename(x = longitude, y = latitude)
-  ),
-
-  # join together
-  # nb this will include all locations outside as well as inside of Africa
   tar_target(
     locations,
-    dplyr::bind_rows(
-      locations_new,
-      locations_ktu
-    ) |>
-      dplyr::distinct()
+    read_csv(locfile) |>
+      select(x = longitude, y = latitude)
   ),
+
   tar_target(
     tt_countries_all,
     global_regions |>
@@ -159,15 +162,15 @@ list(
       overwrite = TRUE
     )
   ),
-  tar_target(
-    trave_time_africa_plot,
-    contour(
-      travel_time_africa,
-      filled = TRUE,
-      nlevels = 14,
-      col = idem(16)
-    )
-  ),
+  # tar_target(
+  #   trave_time_africa_plot,
+  #   contour(
+  #     travel_time_africa,
+  #     filled = TRUE,
+  #     nlevels = 14,
+  #     col = idem(16)
+  #   )
+  # ),
 
   ## TT by country
   # this version calculates from first, the nearest research location
@@ -224,7 +227,37 @@ list(
       filename = "outputs/tt_by_country.tif",
       overwrite = TRUE
     )
+  ),
+
+  ########### some plots
+
+  tar_target(
+    occurrences,
+    getVecOcc(continent = "Africa")
+  ),
+
+
+  tar_terra_vect(
+    occ_pts,
+    bind_cols(
+      occurrences |>
+        as.data.frame(),
+      occurrences |>
+        st_coordinates()
+    ) |>
+      as_tibble() |>
+      select(-geometry) |>
+      vect(
+        geom = c("X", "Y"),
+        crs = crs(africa_points_v)
+      )
+  ),
+
+  tar_target(
+    annoying_end_of_list_thing,
+    "so I don't need to wonder about adding the comma or not"
   )
+
 )
 
 # plots of points overlaying travel time
