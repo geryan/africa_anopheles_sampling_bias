@@ -99,6 +99,33 @@ ggsave(
   units = "px"
 )
 
+## tt by country plus points
+
+p_tt_africa_pts <- ggplot() +
+  geom_spatraster(data = sqrt(travel_time_africa)) +
+  geom_spatvector(
+    data = africa_points_v,
+    col = "deeppink"
+  ) +
+  theme_void() +
+  theme(legend.position = "none") +
+  scale_fill_viridis_c(
+    option = "G",
+    begin = 1,
+    end = 0,
+    na.value = "white"
+  )
+
+p_tt_africa_pts
+
+ggsave(
+  "outputs/figures/tt_africa_pts.png",
+  plot = p_tt_africa_pts,
+  width = 1600,
+  height = 1600,
+  units = "px"
+)
+
 
 
 ## with all MAP points
@@ -262,63 +289,63 @@ ggsave(
 
 
 
-## Epi plots for comparison
-
-# mask for kenya tanzania and uganda
-kut <- make_africa_mask(
-  type = "vector",
-  countries = c("KEN", "UGA", "TZA")
-)
-
-# get sp version for getRaster
-library(raster)
-kutsp <- as(kut, "Spatial")
-
-
-
-
-pfpc <- getRaster("Malaria__202406_Global_Pf_Incidence_Count")
-
-
-pfpc_kut <- pfpc |>
-  crop(kut) |>
-  mask(kut)
-
-plot(pfpc_kut |> sqrt())
-
-pfir <- getRaster("Malaria__202406_Global_Pf_Incidence_Rate")
-
-pfir_kut <- pfir |>
-  crop(kut) |>
-  mask(kut)
-plot(pfir_kut)
-
-
-pfmc <- getRaster(
-  "Malaria__202406_Global_Pf_Mortality_Count",
-  shp = kutsp
-)
-
-pfmc[is.na(values(pfmc))] <- 0
-pfmc <- mask(pfmc, kut)
-plot(pfmc^(1/3))
-
-ggplot() +
-  geom_spatraster(
-    data = pfmc^(1/3)
-  ) +
-  theme_void() +
-  theme(legend.position = "none") +
-  scale_fill_viridis_c(
-    option = "G",
-    begin = 1,
-    end = 0,
-    na.value = "white"
-  )
-ggsave(
-  filename = "outputs/figures/pf_mortality_count_scaled.png",
-  width = 1600,
-  height = 1600,
-  units = "px",
-  bg = "white"
-)
+# ## Epi plots for comparison
+#
+# # mask for kenya tanzania and uganda
+# kut <- make_africa_mask(
+#   type = "vector",
+#   countries = c("KEN", "UGA", "TZA")
+# )
+#
+# # get sp version for getRaster
+# library(raster)
+# kutsp <- as(kut, "Spatial")
+#
+#
+#
+#
+# pfpc <- getRaster("Malaria__202406_Global_Pf_Incidence_Count")
+#
+#
+# pfpc_kut <- pfpc |>
+#   crop(kut) |>
+#   mask(kut)
+#
+# plot(pfpc_kut |> sqrt())
+#
+# pfir <- getRaster("Malaria__202406_Global_Pf_Incidence_Rate")
+#
+# pfir_kut <- pfir |>
+#   crop(kut) |>
+#   mask(kut)
+# plot(pfir_kut)
+#
+#
+# pfmc <- getRaster(
+#   "Malaria__202406_Global_Pf_Mortality_Count",
+#   shp = kutsp
+# )
+#
+# pfmc[is.na(values(pfmc))] <- 0
+# pfmc <- mask(pfmc, kut)
+# plot(pfmc^(1/3))
+#
+# ggplot() +
+#   geom_spatraster(
+#     data = pfmc^(1/3)
+#   ) +
+#   theme_void() +
+#   theme(legend.position = "none") +
+#   scale_fill_viridis_c(
+#     option = "G",
+#     begin = 1,
+#     end = 0,
+#     na.value = "white"
+#   )
+# ggsave(
+#   filename = "outputs/figures/pf_mortality_count_scaled.png",
+#   width = 1600,
+#   height = 1600,
+#   units = "px",
+#   bg = "white"
+# )
