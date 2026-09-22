@@ -28,6 +28,8 @@ tar_option_set(
     "sf",
     "malariaAtlas",
     "tidyterra",
+    "ggplot2",
+    "patchwork",
     "idpalette",
     "readxl"
   )#,
@@ -251,6 +253,169 @@ list(
         geom = c("X", "Y"),
         crs = crs(africa_points_v)
       )
+  ),
+
+  # vector occurrence and research locations together, labelled by data_type
+  tar_terra_vect(
+    all_pts,
+    combine_point_types(
+      occ_pts,
+      africa_points_v
+    )
+  ),
+
+  # flat raster mask for Africa
+  tar_terra_rast(
+    africa_flat_mask,
+    make_flat_mask(tt_country)
+  ),
+
+  # figures: each target writes a png and returns its path
+
+  ## tt across continent
+  tar_target(
+    fig_tt,
+    save_plot(
+      plot_raster_map(travel_time_africa),
+      "outputs/figures/tt.png",
+      bg = "transparent"
+    ),
+    format = "file"
+  ),
+
+  ## tt by country
+  tar_target(
+    fig_tt_country,
+    save_plot(
+      plot_raster_map(tt_country),
+      "outputs/figures/tt_country.png",
+      bg = "transparent"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_tt_country_sqrt,
+    save_plot(
+      plot_raster_map(sqrt(tt_country)),
+      "outputs/figures/tt_country_sqrt.png",
+      bg = "transparent"
+    ),
+    format = "file"
+  ),
+
+  ## tt plus research locations
+  tar_target(
+    fig_tt_country_pts,
+    save_plot(
+      plot_raster_map(
+        sqrt(tt_country),
+        points = africa_points_v
+      ),
+      "outputs/figures/tt_country_pts.png",
+      bg = "transparent"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_tt_africa_pts,
+    save_plot(
+      plot_raster_map(
+        sqrt(travel_time_africa),
+        points = africa_points_v
+      ),
+      "outputs/figures/tt_africa_pts.png",
+      bg = "transparent"
+    ),
+    format = "file"
+  ),
+
+  ## vector occurrence and research locations
+  tar_target(
+    fig_vec_occ,
+    save_plot(
+      plot_data_type_map(
+        africa_flat_mask,
+        all_pts |>
+          filter(data_type == "Vector\noccurrence"),
+        colours = "gold",
+        fill_end = 0.7
+      ),
+      "outputs/figures/vec_occ.png"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_vec_occ_res,
+    save_plot(
+      plot_data_type_map(
+        africa_flat_mask,
+        all_pts,
+        colours = c("deeppink", "gold"),
+        fill_end = 0.7
+      ),
+      "outputs/figures/vec_occ_res.png"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_vec_occ_res_tt,
+    save_plot(
+      plot_data_type_map(
+        sqrt(tt_country),
+        all_pts,
+        colours = c("deeppink", "gold")
+      ),
+      "outputs/figures/vec_occ_res_tt.png"
+    ),
+    format = "file"
+  ),
+
+  ## single-country figures, one branch per country
+  tar_target(
+    focal_countries,
+    c("COD", "NGA", "TZA")
+  ),
+  tar_target(
+    fig_country_tt,
+    save_plot(
+      plot_country_tt(
+        focal_countries,
+        tt_country,
+        country_shps_v
+      ),
+      sprintf("outputs/figures/tt_%s.png", focal_countries)
+    ),
+    pattern = map(focal_countries),
+    format = "file"
+  ),
+  tar_target(
+    fig_country_tt_pts,
+    save_plot(
+      plot_country_tt_pts(
+        focal_countries,
+        tt_country,
+        country_shps_v,
+        all_pts
+      ),
+      sprintf("outputs/figures/tt_pts_%s.png", focal_countries)
+    ),
+    pattern = map(focal_countries),
+    format = "file"
+  ),
+  tar_target(
+    fig_country_tt_panel,
+    save_plot(
+      plot_country_tt_panel(
+        focal_countries,
+        tt_country,
+        country_shps_v,
+        all_pts
+      ),
+      sprintf("outputs/figures/tt_panel_%s.png", focal_countries),
+      width = 3200
+    ),
+    pattern = map(focal_countries),
+    format = "file"
   ),
 
   tar_target(

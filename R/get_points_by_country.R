@@ -1,7 +1,7 @@
 get_points_by_country <- function(
-  points,
-  countries,
-  shp_filename
+    points,
+    countries,
+    shp_filename
 ){
 
   country_shps_tbl <- make_country_shps(
@@ -22,7 +22,7 @@ get_points_by_country <- function(
   names(country_shps_svc) <- country_shps_tbl |> pull(countries)
 
 
-  map(
+  purrr::map(
     .x = country_shps_svc,
     .f = select_points,
     points = points
