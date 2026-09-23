@@ -294,6 +294,37 @@ list(
     format = "file"
   ),
   tar_target(
+    fig_tt_country_180,
+    save_plot(
+      plot_tt_capped(
+        tt_country,
+        africa_mask_v,
+        max_tt = 180,
+        # same colour scale as fig_tt_country
+        limits = minmax(tt_country)[, 1]
+      ),
+      "outputs/figures/tt_country_180.png",
+      bg = "transparent"
+    ),
+    format = "file"
+  ),
+  # tt_country without (left) and with (right) the 180 minute mask
+  tar_target(
+    fig_tt_country_180_panel,
+    save_plot(
+      plot_raster_map(tt_country) |
+        plot_tt_capped(
+          tt_country,
+          africa_mask_v,
+          max_tt = 180,
+          limits = minmax(tt_country)[, 1]
+        ),
+      "outputs/figures/tt_country_180_panel.png",
+      width = 3200
+    ),
+    format = "file"
+  ),
+  tar_target(
     fig_tt_country_sqrt,
     save_plot(
       plot_raster_map(sqrt(tt_country)),
@@ -415,6 +446,88 @@ list(
       width = 3200
     ),
     pattern = map(focal_countries),
+    format = "file"
+  ),
+
+  ## occurrence records per cell against travel time
+  tar_target(
+    tt_occ_data,
+    make_tt_occ_data(
+      tt_country,
+      occ_pts,
+      agg_fact = 10
+    )
+  ),
+  # model variants, one gam per row: maximum travel time (minutes) of cells
+  # to fit and plot to, and whether to smooth on raw or log1p travel time
+  tar_target(
+    tt_occ_models,
+    expand.grid(
+      max_tt = 180,
+      smooth = "linear",
+      stringsAsFactors = FALSE
+    )
+  ),
+  # plot each model with these y axes (FALSE linear, TRUE log)
+  tar_target(
+    tt_occ_log_y,
+    FALSE
+  ),
+  # overlay observed mean records per cell by travel time bin
+  tar_target(
+    tt_occ_show_obs,
+    TRUE
+  ),
+  # plot each model with each type of errorbar on the observed rates: none,
+  # 5th-95th percentiles of per-cell rates, or 90% CI of the rate
+  tar_target(
+    tt_occ_errorbars,
+    c("none", "percentile", "ci90")
+  ),
+  # y axis upper limit (records per 100 km2) for all versions, anything above
+  # is clipped. NULL to fit the axis to the curve and observed rates
+  tar_target(
+    tt_occ_y_max,
+    30
+  ),
+  tar_target(
+    tt_occ_pred,
+    fit_tt_occ_gam(
+      tt_occ_data,
+      max_tt = tt_occ_models$max_tt,
+      smooth = tt_occ_models$smooth
+    ),
+    pattern = map(tt_occ_models)
+  ),
+  tar_target(
+    fig_tt_occ_gam,
+    save_plot(
+      plot_tt_occ_gam(
+        tt_occ_pred,
+        tt_occ_obs = if (tt_occ_show_obs) {
+          bin_tt_occ(tt_occ_data, tt_occ_models$max_tt)
+        } else {
+          NULL
+        },
+        errorbars = tt_occ_errorbars,
+        log_x = tt_occ_models$max_tt > 1000,
+        log_y = tt_occ_log_y,
+        y_max = tt_occ_y_max
+      ),
+      sprintf(
+        "outputs/figures/tt_occ_gam_%s_%s_%s%s.png",
+        ifelse(is.finite(tt_occ_models$max_tt), tt_occ_models$max_tt, "full"),
+        tt_occ_models$smooth,
+        ifelse(tt_occ_log_y, "logy", "liny"),
+        ifelse(tt_occ_errorbars == "none", "", paste0("_", tt_occ_errorbars))
+      ),
+      width = 2400
+    ),
+    pattern = cross(
+      map(tt_occ_pred, tt_occ_models),
+      tt_occ_log_y,
+      tt_occ_errorbars
+    ),
     format = "file"
   ),
 
