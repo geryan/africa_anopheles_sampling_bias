@@ -233,18 +233,19 @@ list(
 
   ########### some plots
 
+  # occurrence_old: MAP vector occurrence records
   tar_target(
-    occurrences,
+    occurrences_old,
     getVecOcc(continent = "Africa")
   ),
 
 
   tar_terra_vect(
-    occ_pts,
+    occ_pts_old,
     bind_cols(
-      occurrences |>
+      occurrences_old |>
         as.data.frame(),
-      occurrences |>
+      occurrences_old |>
         st_coordinates()
     ) |>
       as_tibble() |>
@@ -255,12 +256,39 @@ list(
       )
   ),
 
+  # occurrence_new: vector atlas point locations
+  tar_target(
+    occurrence_new_file,
+    "data/tabular/va_point_locations.csv",
+    format = "file"
+  ),
+  tar_target(
+    occurrence_new,
+    read_occurrence_new(occurrence_new_file)
+  ),
+  tar_terra_vect(
+    occ_pts_new,
+    occurrence_tbl_to_vect(
+      occurrence_new,
+      crs = crs(africa_points_v)
+    )
+  ),
+
   # vector occurrence and research locations together, labelled by data_type
   tar_terra_vect(
     all_pts,
     combine_point_types(
-      occ_pts,
+      occ_pts_old,
       africa_points_v
+    )
+  ),
+  # as all_pts, plus the occurrence_new points
+  tar_terra_vect(
+    all_pts_both,
+    combine_point_types(
+      occ_pts_old,
+      africa_points_v,
+      occ_pts_new
     )
   ),
 
@@ -367,8 +395,8 @@ list(
       plot_data_type_map(
         africa_flat_mask,
         all_pts |>
-          filter(data_type == "Vector\noccurrence"),
-        colours = "gold",
+          filter(data_type == "Old records"),
+        colours = data_type_colours(),
         fill_end = 0.7
       ),
       "outputs/figures/vec_occ.png"
@@ -381,7 +409,7 @@ list(
       plot_data_type_map(
         africa_flat_mask,
         all_pts,
-        colours = c("deeppink", "gold"),
+        colours = data_type_colours(),
         fill_end = 0.7
       ),
       "outputs/figures/vec_occ_res.png"
@@ -394,9 +422,58 @@ list(
       plot_data_type_map(
         sqrt(tt_country),
         all_pts,
-        colours = c("deeppink", "gold")
+        colours = data_type_colours()
       ),
       "outputs/figures/vec_occ_res_tt.png"
+    ),
+    format = "file"
+  ),
+
+  ## as above, with occurrence_old and occurrence_new, smaller points and
+  ## untransformed travel time
+  tar_target(
+    occ_point_size_both,
+    1
+  ),
+  tar_target(
+    fig_vec_occ_both,
+    save_plot(
+      plot_data_type_map(
+        africa_flat_mask,
+        all_pts_both |>
+          filter(data_type != "Research\nfacility"),
+        colours = data_type_colours(),
+        fill_end = 0.7,
+        point_size = occ_point_size_both
+      ),
+      "outputs/figures/vec_occ_both.png"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_vec_occ_res_both,
+    save_plot(
+      plot_data_type_map(
+        africa_flat_mask,
+        all_pts_both,
+        colours = data_type_colours(),
+        fill_end = 0.7,
+        point_size = occ_point_size_both
+      ),
+      "outputs/figures/vec_occ_res_both.png"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_vec_occ_res_tt_both,
+    save_plot(
+      plot_data_type_map(
+        tt_country,
+        all_pts_both,
+        colours = data_type_colours(),
+        point_size = occ_point_size_both
+      ),
+      "outputs/figures/vec_occ_res_tt_both.png"
     ),
     format = "file"
   ),
@@ -449,12 +526,54 @@ list(
     format = "file"
   ),
 
+  ## as above, with occurrence_old and occurrence_new, smaller points and
+  ## untransformed travel time
+  tar_target(
+    fig_country_tt_pts_both,
+    save_plot(
+      plot_country_tt_pts(
+        focal_countries,
+        tt_country,
+        country_shps_v,
+        all_pts_both,
+        point_size = occ_point_size_both
+      ),
+      sprintf("outputs/figures/tt_pts_both_%s.png", focal_countries)
+    ),
+    pattern = map(focal_countries),
+    format = "file"
+  ),
+  tar_target(
+    fig_country_tt_panel_both,
+    save_plot(
+      plot_country_tt_panel(
+        focal_countries,
+        tt_country,
+        country_shps_v,
+        all_pts_both,
+        point_size = occ_point_size_both
+      ),
+      sprintf("outputs/figures/tt_panel_both_%s.png", focal_countries),
+      width = 3200
+    ),
+    pattern = map(focal_countries),
+    format = "file"
+  ),
+
   ## occurrence records per cell against travel time
   tar_target(
-    tt_occ_data,
+    tt_occ_data_old,
     make_tt_occ_data(
       tt_country,
-      occ_pts,
+      occ_pts_old,
+      agg_fact = 10
+    )
+  ),
+  tar_target(
+    tt_occ_data_new,
+    make_tt_occ_data(
+      tt_country,
+      occ_pts_new,
       agg_fact = 10
     )
   ),
@@ -491,9 +610,18 @@ list(
     30
   ),
   tar_target(
-    tt_occ_pred,
+    tt_occ_pred_old,
     fit_tt_occ_gam(
-      tt_occ_data,
+      tt_occ_data_old,
+      max_tt = tt_occ_models$max_tt,
+      smooth = tt_occ_models$smooth
+    ),
+    pattern = map(tt_occ_models)
+  ),
+  tar_target(
+    tt_occ_pred_new,
+    fit_tt_occ_gam(
+      tt_occ_data_new,
       max_tt = tt_occ_models$max_tt,
       smooth = tt_occ_models$smooth
     ),
@@ -503,9 +631,9 @@ list(
     fig_tt_occ_gam,
     save_plot(
       plot_tt_occ_gam(
-        tt_occ_pred,
+        tt_occ_pred_old,
         tt_occ_obs = if (tt_occ_show_obs) {
-          bin_tt_occ(tt_occ_data, tt_occ_models$max_tt)
+          bin_tt_occ(tt_occ_data_old, tt_occ_models$max_tt)
         } else {
           NULL
         },
@@ -524,7 +652,52 @@ list(
       width = 2400
     ),
     pattern = cross(
-      map(tt_occ_pred, tt_occ_models),
+      map(tt_occ_pred_old, tt_occ_models),
+      tt_occ_log_y,
+      tt_occ_errorbars
+    ),
+    format = "file"
+  ),
+
+  # as fig_tt_occ_gam, with a curve per dataset
+  tar_target(
+    fig_tt_occ_gam_both,
+    save_plot(
+      plot_tt_occ_gam_both(
+        preds = list(
+          "Old records" = tt_occ_pred_old,
+          "New records" = tt_occ_pred_new
+        ),
+        obs = if (tt_occ_show_obs) {
+          list(
+            "Old records" = bin_tt_occ(
+              tt_occ_data_old,
+              tt_occ_models$max_tt
+            ),
+            "New records" = bin_tt_occ(
+              tt_occ_data_new,
+              tt_occ_models$max_tt
+            )
+          )
+        } else {
+          NULL
+        },
+        errorbars = tt_occ_errorbars,
+        log_x = tt_occ_models$max_tt > 1000,
+        log_y = tt_occ_log_y,
+        y_max = tt_occ_y_max
+      ),
+      sprintf(
+        "outputs/figures/tt_occ_gam_both_%s_%s_%s%s.png",
+        ifelse(is.finite(tt_occ_models$max_tt), tt_occ_models$max_tt, "full"),
+        tt_occ_models$smooth,
+        ifelse(tt_occ_log_y, "logy", "liny"),
+        ifelse(tt_occ_errorbars == "none", "", paste0("_", tt_occ_errorbars))
+      ),
+      width = 2400
+    ),
+    pattern = cross(
+      map(tt_occ_pred_old, tt_occ_pred_new, tt_occ_models),
       tt_occ_log_y,
       tt_occ_errorbars
     ),

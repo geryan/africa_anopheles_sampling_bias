@@ -47,7 +47,7 @@ plot_tt_occ_gam <- function(
       geom_errorbar(
         data = tt_occ_obs,
         bar_limits,
-        col = "deeppink",
+        col = data_type_colours()[["Old records"]],
         width = 0
       )
   }
@@ -58,7 +58,7 @@ plot_tt_occ_gam <- function(
         data = tt_occ_obs |>
           filter(!log_y | rate > 0),
         aes(y = rate),
-        col = "deeppink"
+        col = data_type_colours()[["Old records"]]
       )
   }
 

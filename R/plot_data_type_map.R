@@ -3,7 +3,8 @@ plot_data_type_map <- function(
     background,
     pts,
     colours,
-    fill_end = 0
+    fill_end = 0,
+    point_size = 1.5
 ){
 
   ggplot() +
@@ -14,7 +15,8 @@ plot_data_type_map <- function(
       data = pts,
       aes(
         col = data_type
-      )
+      ),
+      size = point_size
     ) +
     scale_fill_viridis_c(
       option = "G",

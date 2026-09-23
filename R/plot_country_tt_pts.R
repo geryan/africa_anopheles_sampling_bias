@@ -1,13 +1,17 @@
-plot_country_tt_pts <- function(iso3, tt, country_shps_v, pts){
+plot_country_tt_pts <- function(
+    iso3,
+    tt,
+    country_shps_v,
+    pts,
+    point_size = 1.5
+){
 
   plot_data_type_map(
     mask_to_country(tt, country_shps_v, iso3),
     mask_to_country(pts, country_shps_v, iso3),
     # named so colours stay consistent if a country lacks one data type
-    colours = c(
-      "Research\nfacility" = "deeppink",
-      "Vector\noccurrence" = "gold"
-    )
+    colours = data_type_colours(),
+    point_size = point_size
   ) +
     theme(
       legend.position = "bottom",
