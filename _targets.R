@@ -560,6 +560,85 @@ list(
     format = "file"
   ),
 
+  ## the same figures for a group of countries plotted together
+  tar_target(
+    focal_country_group,
+    c("KEN", "UGA", "TZA")
+  ),
+  tar_target(
+    focal_country_group_label,
+    paste(focal_country_group, collapse = "_")
+  ),
+  tar_target(
+    fig_country_group_tt,
+    save_plot(
+      plot_country_tt(
+        focal_country_group,
+        tt_country,
+        country_shps_v
+      ),
+      sprintf("outputs/figures/tt_%s.png", focal_country_group_label)
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_country_group_tt_pts,
+    save_plot(
+      plot_country_tt_pts(
+        focal_country_group,
+        sqrt(tt_country),
+        country_shps_v,
+        all_pts
+      ),
+      sprintf("outputs/figures/tt_pts_%s.png", focal_country_group_label)
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_country_group_tt_panel,
+    save_plot(
+      plot_country_tt_panel(
+        focal_country_group,
+        sqrt(tt_country),
+        country_shps_v,
+        all_pts
+      ),
+      sprintf("outputs/figures/tt_panel_%s.png", focal_country_group_label),
+      width = 3200
+    ),
+    format = "file"
+  ),
+  # with occurrence_old and occurrence_new, smaller points, raw travel time
+  tar_target(
+    fig_country_group_tt_pts_both,
+    save_plot(
+      plot_country_tt_pts(
+        focal_country_group,
+        tt_country,
+        country_shps_v,
+        all_pts_both,
+        point_size = occ_point_size_both
+      ),
+      sprintf("outputs/figures/tt_pts_both_%s.png", focal_country_group_label)
+    ),
+    format = "file"
+  ),
+  tar_target(
+    fig_country_group_tt_panel_both,
+    save_plot(
+      plot_country_tt_panel(
+        focal_country_group,
+        tt_country,
+        country_shps_v,
+        all_pts_both,
+        point_size = occ_point_size_both
+      ),
+      sprintf("outputs/figures/tt_panel_both_%s.png", focal_country_group_label),
+      width = 3200
+    ),
+    format = "file"
+  ),
+
   ## occurrence records per cell against travel time
   tar_target(
     tt_occ_data_old,
